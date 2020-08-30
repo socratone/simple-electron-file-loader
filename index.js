@@ -1,8 +1,13 @@
+const { ipcRenderer } = require('electron');
+
 const loadButton = document.getElementById('load-button');
 const resultArea = document.getElementById('result-area');
-const fs = require('fs');
 
 loadButton.addEventListener('click', () => {
-  const fileNames = fs.readdirSync(__dirname);
-  resultArea.append(fileNames);
+  ipcRenderer.on('asynchronous-reply', (event, arg) => {
+    console.log('renderer process');
+    console.log('arg:', arg);
+    resultArea.append(arg);
+  });
+  ipcRenderer.send('asynchronous-message', '비어 있는 값');
 });
